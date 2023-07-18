@@ -35,8 +35,10 @@ const controls = new OrbitControls(camera, canvas);
 
 const total = -3;
 const offset = 4;
-const material = new THREE.MeshNormalMaterial({ wireframe: false });
+const material = new THREE.MeshStandardMaterial({ color: 0x1ea8fc, wireframe: false });
 gui.add(material, "wireframe");
+gui.add(light, "visible").name("light visible")
+gui.add(light, "intensity").min(0).max(5).step(0.001).name("")
 
 // const axesHelper = new THREE.AxesHelper(5);
 // scene.add(axesHelper);
