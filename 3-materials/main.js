@@ -9,15 +9,15 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x21272e);
 
 const sizes = {
-  width: window.innerWidth,
-  height: window.innerHeight,
+	width: window.innerWidth,
+	height: window.innerHeight,
 };
 
 const camera = new THREE.PerspectiveCamera(
-  75,
-  sizes.width / sizes.height,
-  0.1,
-  5000,
+	75,
+	sizes.width / sizes.height,
+	0.1,
+	5000,
 );
 
 camera.position.set(0, 5, 12);
@@ -41,7 +41,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 const controls = new OrbitControls(camera, canvas);
 
 function mesh(geometry, material) {
-  return new THREE.Mesh(geometry, material);
+	return new THREE.Mesh(geometry, material);
 }
 
 const sphere = new THREE.SphereGeometry(1, 32, 16);
@@ -53,7 +53,7 @@ const material2 = new THREE.MeshDepthMaterial();
 const material3 = new THREE.MeshLambertMaterial({ color: 0x1ea8fc });
 
 const matcapTexture = new THREE.TextureLoader().load(
-  "./images/3E2335_D36A1B_8E4A2E_2842A5-512px.png",
+	"./images/3E2335_D36A1B_8E4A2E_2842A5-512px.png",
 );
 const material4 = new THREE.MeshMatcapMaterial({ matcap: matcapTexture });
 console.log(material4);
@@ -91,40 +91,40 @@ const physical = mesh(sphere, material8);
 physical.position.set(5, -1.5, 0);
 
 const materials = [
-  basic,
-  depth,
-  lambert,
-  matcap,
-  normal,
-  phong,
-  toon,
-  physical,
+	basic,
+	depth,
+	lambert,
+	matcap,
+	normal,
+	phong,
+	toon,
+	physical,
 ];
 
 for (const material of materials) {
-  scene.add(material);
+	scene.add(material);
 }
 
 const tick = () => {
-  // update controls
-  controls.update();
+	// update controls
+	controls.update();
 
-  //render
-  renderer.render(scene, camera);
-  window.requestAnimationFrame(tick);
+	//render
+	renderer.render(scene, camera);
+	window.requestAnimationFrame(tick);
 };
 
 tick();
 
 window.addEventListener("resize", () => {
-  sizes.width = window.innerWidth;
-  sizes.height = window.innerHeight;
+	sizes.width = window.innerWidth;
+	sizes.height = window.innerHeight;
 
-  // update camera
-  camera.aspect = sizes.width / sizes.height;
-  camera.updateProjectionMatrix();
+	// update camera
+	camera.aspect = sizes.width / sizes.height;
+	camera.updateProjectionMatrix();
 
-  // update renderer
-  renderer.setSize(sizes.width, sizes.height);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+	// update renderer
+	renderer.setSize(sizes.width, sizes.height);
+	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 });
