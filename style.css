@@ -1,0 +1,42 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: min(90%, 500px);
+  height: 100vh;
+  margin: 0 auto;
+  background: #21272e;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  padding-block: 4rem;
+  color: whitesmoke;
+}
+
+h1 {
+  margin-bottom: 2rem;
+  font-size: 32px;
+}
+
+ul {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+li {
+  margin-left: 1.5rem;
+}
+
+a {
+  font-size: 22px;
+  text-transform: capitalize;
+  color: whitesmoke;
+}
