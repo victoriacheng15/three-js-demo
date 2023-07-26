@@ -1,41 +1,44 @@
-const fs = require("fs");
+const fs = require("fs").promises;
 const path = require("path");
 
-function getFolders(directoryPath) {
+async function getFolders(directoryPath) {
 	const folders = [];
 
-	const items = fs.readdirSync(directoryPath);
-	const notIncluded = [".git", "template-vite"];
-	const filtered = items.filter(
-		(item) => !notIncluded.includes(item),
-	);
+	try {
+		const items = await fs.readdir(directoryPath);
+		const filtered = items.filter(
+			(item) => !item.startsWith(".") && !item.startsWith("template"),
+		);
 
-	for (const item of filtered) {
-		if (fs.statSync(item).isDirectory()) {
-			folders.push(item);
+		for (const item of filtered) {
+			const stats = await fs.stat(item);
+			if (stats.isDirectory()) {
+				folders.push(item);
+			}
 		}
+
+	} catch (error) {
+		console.error("Error reading folders:", error);
 	}
 
 	return folders;
 }
 
-function updateREADME() {
+async function updateREADME() {
 	try {
 		const page = "https://victoriacheng15.github.io/three-js-demo/";
 
 		const currentDirectory = process.cwd();
-		const folders = getFolders(currentDirectory);
+		const folders = await getFolders(currentDirectory);
 		const displayFolder = folders
 			.map((folder) => `- [${folder.slice(2)}](${page}${folder})`)
 			.join("\n");
 
-		const markdownContent = `# Three.js Demos
-
-${displayFolder}`;
+		const markdownContent = `# Three.js Demos\n\n${displayFolder}`;
 
 		const markdownFilePath = path.join(currentDirectory, "README.md");
-		fs.writeFileSync(markdownFilePath, markdownContent);
-		console.log(`README.md has been updated.`);
+		await fs.writeFile(markdownFilePath, markdownContent);
+		console.log("README.md has been updated.");
 	} catch (error) {
 		console.error("Error updating README.md:", error);
 	}
