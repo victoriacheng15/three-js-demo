@@ -18,14 +18,10 @@ jobs:
         with:
           node-version: 18
 
-      - name: git configure
-        run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
-
       - name: Make changes and commit
         run: |
           git switch -c update-readme
+          git pull origin main --no-ff
           node index.js
           git add README.md
           git commit -m "update README with latest list"
@@ -34,7 +30,5 @@ jobs:
       - name: create and merge PR
         run: |
           gh pr create --base=main --head=update-readme -f
-          # sleep 15
-          # gh pr merge -s -d
         env: 
           GH_TOKEN: ${{ github.token }}
