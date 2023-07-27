@@ -25,7 +25,7 @@ jobs:
       - name: Make changes and commit
         run: |
           git switch -c update-readme
-          git pull origin main --no-ff
+          git pull origin main
           node index.js
           git add README.md
           git commit -m "update README with latest list"
