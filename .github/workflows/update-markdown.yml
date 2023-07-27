@@ -33,7 +33,7 @@ jobs:
 
       - name: create and merge PR
         run: |
-          gh pr create --base=main --head=update-readme --f
+          gh pr create --base=main --head=update-readme -f
           # sleep 15
           # gh pr merge -s -d
         env: 
