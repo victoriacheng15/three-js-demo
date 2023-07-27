@@ -10,10 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout
-        uses: actions/checkout@v3
-      - name: setup node
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 18
     
@@ -25,14 +23,14 @@ jobs:
       - name: Make changes and commit
         run: |
           git switch -c update-readme
-          git pull origin main --rebase
+          git pull origin main --no-ff
           node index.js
-          git add README.md
+          git add .
           git commit -m "update README with latest list"
           git push origin update-readme
 
       - name: create and merge PR
-        run: |
-          gh pr create --base=main --head=update-readme -f
         env: 
           GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr create --base=main --head=update-readme -f
