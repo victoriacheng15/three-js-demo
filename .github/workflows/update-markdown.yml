@@ -17,6 +17,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+    
+      - name: git config
+        run: |
+          author
+          git config --local user.email "${{ secrets.EMAIL }}"
+          git config --local user.name "${{ secrets.NAME }}"
 
       - name: Make changes and commit
         run: |
