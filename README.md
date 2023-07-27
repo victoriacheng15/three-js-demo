@@ -1,6 +1,8 @@
 # Three.js Demos
 
-- [template](https://victoriacheng15.github.io/three-js-demo/1-template)
-- [shapes](https://victoriacheng15.github.io/three-js-demo/2-shapes)
-- [materials](https://victoriacheng15.github.io/three-js-demo/3-materials)
-- [directional-light](https://victoriacheng15.github.io/three-js-demo/4-directional-light)
+- [Template](https://victoriacheng15.github.io/three-js-demo/1-template)
+- [Shapes](https://victoriacheng15.github.io/three-js-demo/2-shapes)
+- [Materials](https://victoriacheng15.github.io/three-js-demo/3-materials)
+- [Directional light](https://victoriacheng15.github.io/three-js-demo/4-directional-light)
+- [Hemisphere light](https://victoriacheng15.github.io/three-js-demo/5-hemisphere-light)
+- [Point light](https://victoriacheng15.github.io/three-js-demo/6-point-light)
