@@ -16,12 +16,17 @@ async function getFolders(directoryPath) {
 				folders.push(item);
 			}
 		}
-
 	} catch (error) {
 		console.error("Error reading folders:", error);
 	}
 
 	return folders;
+}
+
+function capitalizeLink(str) {
+	const getWords = str.slice(2).replace(/-/g, " ");
+	const capFirstLetter = getWords[0].toUpperCase();
+	return capFirstLetter + getWords.slice(1);
 }
 
 async function updateREADME() {
@@ -31,7 +36,7 @@ async function updateREADME() {
 		const currentDirectory = process.cwd();
 		const folders = await getFolders(currentDirectory);
 		const displayFolder = folders
-			.map((folder) => `- [${folder.slice(2)}](${page}${folder})`)
+			.map((folder) => `- [${capitalizeLink(folder)}](${page}${folder})`)
 			.join("\n");
 
 		const markdownContent = `# Three.js Demos\n\n${displayFolder}`;
