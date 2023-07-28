@@ -1,5 +1,5 @@
-import * as THREE from "https://unpkg.com/three@0.126.1/build/three.module.js";
-import { OrbitControls } from "https://unpkg.com/three@0.126.1/examples/jsm/controls/OrbitControls.js";
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.18/+esm";
 
 const gui = new GUI();
@@ -23,11 +23,9 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.set(0, 0, 3);
 scene.add(camera);
 
-const light = new THREE.DirectionalLight(0xffffff, 3);
+const light = new THREE.DirectionalLight(0xffffff, 0.5);
 light.position.set(1, 1, 1).normalize();
-// const lightHelper = new THREE.DirectionalLightHelper(light, 0.5);
 scene.add(light);
-// scene.add(lightHelper)
 
 const renderer = new THREE.WebGLRenderer({ canvas });
 renderer.setSize(sizes.width, sizes.height);
@@ -35,26 +33,19 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 const controls = new OrbitControls(camera, canvas);
 
-const colorParameters = {
-	string: "#1ea8fc",
-};
-
 const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
 const boxMaterial = new THREE.MeshStandardMaterial({
-	color: colorParameters.string,
+	color: "#1ea8fc",
 });
 const box = new THREE.Mesh(boxGeometry, boxMaterial);
 scene.add(box);
 
 gui.add(boxMaterial, "wireframe");
 gui.add(light, "visible").name("light intensity");
-gui.add(light, "intensity").min(0).max(10).step(0.001).name("");
-gui
-	.addColor(colorParameters, "string")
-	.onChange(() => {
-		boxMaterial.color.set(colorParameters.string);
-	})
-	.name("color");
+gui.add(light, "intensity", 0, 5, 0.001).min(0);
+gui.addColor(boxMaterial, "color").onChange((value) => {
+	boxMaterial.color.set(value);
+});
 
 const clock = new THREE.Clock();
 
