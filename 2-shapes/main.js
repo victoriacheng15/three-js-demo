@@ -1,5 +1,5 @@
-import * as THREE from "https://unpkg.com/three@0.154.0/build/three.module.js";
-import { OrbitControls } from "https://unpkg.com/three@0.126.0/examples/jsm/controls/OrbitControls.js";
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.18/+esm";
 
 const gui = new GUI();
