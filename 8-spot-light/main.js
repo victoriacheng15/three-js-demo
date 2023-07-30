@@ -24,15 +24,20 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.set(3, 4, 5);
 scene.add(camera);
 
-const distance = 0
-const angle = 3
-const penumbra = 0.5
-const decay = 0
+const distance = 0;
+const angle = 3;
+const penumbra = 0.5;
+const decay = 0;
 const spotLight = new THREE.SpotLight(
-	0x1fc600, 0.5, distance, Math.PI / angle, penumbra, decay
+	0x1fc600,
+	0.5,
+	distance,
+	Math.PI / angle,
+	penumbra,
+	decay,
 );
-spotLight.position.set(0, 3, 0)
-const spotLightHelper = new THREE.SpotLightHelper(spotLight)
+spotLight.position.set(0, 3, 0);
+const spotLightHelper = new THREE.SpotLightHelper(spotLight);
 scene.add(spotLight, spotLightHelper);
 
 const ambientLight = new THREE.AmbientLight(0x404040, 0);
@@ -59,12 +64,12 @@ materialFolder.add(material, "metalness", 0, 1, 0.001).onChange((value) => {
 /* 
 spot light GUI
 */
-const spotLightFolder = gui.addFolder("Spot Light")
+const spotLightFolder = gui.addFolder("Spot Light");
 spotLightFolder.add(spotLight, "visible");
 spotLightFolder.add(spotLight, "intensity", 0, 3, 0.001);
 spotLightFolder.addColor(spotLight, "color").onChange((value) => {
 	spotLight.color.set(value);
-})
+});
 spotLightFolder.add(spotLight, "penumbra", 0, 1, 0.001);
 spotLightFolder.add(spotLight, "angle", 1, 6, 0.001).onChange((value) => {
 	spotLight.angle = Math.PI / value;

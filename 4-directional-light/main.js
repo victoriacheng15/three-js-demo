@@ -126,7 +126,7 @@ scene.add(plane);
 const shapes = [sphere, cube, torus];
 
 for (const shape of shapes) {
-	scene.add(shape)
+	scene.add(shape);
 }
 
 const clock = new THREE.Clock();
