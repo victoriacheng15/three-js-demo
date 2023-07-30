@@ -2,6 +2,8 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.18/+esm";
 
+THREE.ColorManagement.enabled = false
+
 const gui = new GUI();
 
 const canvas = document.querySelector("canvas");
@@ -24,6 +26,7 @@ camera.position.set(3, 8, 10);
 scene.add(camera);
 
 const renderer = new THREE.WebGLRenderer({ canvas });
+renderer.outputColorSpace = THREE.LinearSRGBColorSpace
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.setSize(sizes.width, sizes.height);
