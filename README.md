@@ -8,3 +8,4 @@
 - [Point light](https://victoriacheng15.github.io/three-js-demo/6-point-light)
 - [Rect area light](https://victoriacheng15.github.io/three-js-demo/7-rect-area-light)
 - [Spot light](https://victoriacheng15.github.io/three-js-demo/8-spot-light)
+- [Shadows](https://victoriacheng15.github.io/three-js-demo/9-shadows)

@@ -84,7 +84,6 @@ ambientFolder.addColor(lightParameters, "ambient").onChange(() => {
 	ambientLight.color.set(lightParameters.ambient);
 });
 
-
 const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 32), material);
 sphere.position.x = -2;
 
