@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.18/+esm";
 
-THREE.ColorManagement.enabled = false
+THREE.ColorManagement.enabled = false;
 
 const gui = new GUI();
 
@@ -58,8 +58,8 @@ const material = new THREE.MeshStandardMaterial({
 	metalness: 0,
 });
 const materialFolder = gui.addFolder("Material");
-materialFolder.add(material, "roughness", 0, 1, 0.001)
-materialFolder.add(material, "metalness", 0, 1, 0.001)
+materialFolder.add(material, "roughness", 0, 1, 0.001);
+materialFolder.add(material, "metalness", 0, 1, 0.001);
 
 /* 
 hemisphere and ambient light GUI
@@ -72,12 +72,9 @@ hemisphereLightFolder
 hemisphereLightFolder
 	.add(hemisphereLight, "intensity", 0, 4, 0.001)
 	.name("Intensity");
-hemisphereLightFolder
-	.add(hemisphereLight.position, "x", -5, 10, 0.001)
-hemisphereLightFolder
-	.add(hemisphereLight.position, "y", -5, 10, 0.001)
-hemisphereLightFolder
-	.add(hemisphereLight.position, "z", -5, 10, 0.001)
+hemisphereLightFolder.add(hemisphereLight.position, "x", -5, 10, 0.001);
+hemisphereLightFolder.add(hemisphereLight.position, "y", -5, 10, 0.001);
+hemisphereLightFolder.add(hemisphereLight.position, "z", -5, 10, 0.001);
 hemisphereLightFolder
 	.addColor(lightColors, "sky")
 	.name("Sky Color")

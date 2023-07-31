@@ -3,7 +3,7 @@ import { RectAreaLightHelper } from "three/addons/helpers/RectAreaLightHelper.js
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.18/+esm";
 
-THREE.ColorManagement.enabled = false
+THREE.ColorManagement.enabled = false;
 
 const gui = new GUI();
 
@@ -53,8 +53,8 @@ const material = new THREE.MeshStandardMaterial({
 	metalness: 0,
 });
 const materialFolder = gui.addFolder("Material");
-materialFolder.add(material, "roughness", 0, 1, 0.001)
-materialFolder.add(material, "metalness", 0, 1, 0.001)
+materialFolder.add(material, "roughness", 0, 1, 0.001);
+materialFolder.add(material, "metalness", 0, 1, 0.001);
 
 /* 
 react area light GUI

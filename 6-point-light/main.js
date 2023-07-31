@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.18/+esm";
 
-THREE.ColorManagement.enabled = false
+THREE.ColorManagement.enabled = false;
 
 const gui = new GUI();
 
@@ -56,8 +56,8 @@ const material = new THREE.MeshStandardMaterial({
 	metalness: 0,
 });
 const materialFolder = gui.addFolder("Material");
-materialFolder.add(material, "roughness", 0, 1, 0.001)
-materialFolder.add(material, "metalness", 0, 1, 0.001)
+materialFolder.add(material, "roughness", 0, 1, 0.001);
+materialFolder.add(material, "metalness", 0, 1, 0.001);
 
 /* 
 point light GUI
@@ -77,8 +77,8 @@ pointLightFolder.add(pointLight.position, "y", -5, 10);
 pointLightFolder.add(pointLight.position, "z", -5, 10);
 
 const ambientFolder = gui.addFolder("Ambient Light");
-ambientFolder.add(ambientLight, "visible")
-ambientFolder.add(ambientLight, "intensity", 0, 1, 0.001)
+ambientFolder.add(ambientLight, "visible");
+ambientFolder.add(ambientLight, "intensity", 0, 1, 0.001);
 ambientFolder.addColor(lightParameters, "ambient").onChange(() => {
 	ambientLight.color.set(lightParameters.ambient);
 });

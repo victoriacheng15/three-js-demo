@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.18/+esm";
 
-THREE.ColorManagement.enabled = false
+THREE.ColorManagement.enabled = false;
 
 const gui = new GUI();
 
