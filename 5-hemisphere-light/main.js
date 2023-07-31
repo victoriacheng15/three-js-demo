@@ -2,6 +2,8 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.18/+esm";
 
+THREE.ColorManagement.enabled = false
+
 const gui = new GUI();
 
 const canvas = document.querySelector("canvas");
@@ -45,6 +47,7 @@ const ambientLight = new THREE.AmbientLight(lightColors.ambient, 0.5);
 scene.add(ambientLight);
 
 const renderer = new THREE.WebGLRenderer({ canvas });
+renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
@@ -55,12 +58,8 @@ const material = new THREE.MeshStandardMaterial({
 	metalness: 0,
 });
 const materialFolder = gui.addFolder("Material");
-materialFolder.add(material, "roughness", 0, 1, 0.001).onChange((value) => {
-	material.roughness = value;
-});
-materialFolder.add(material, "metalness", 0, 1, 0.001).onChange((value) => {
-	material.metalness = value;
-});
+materialFolder.add(material, "roughness", 0, 1, 0.001)
+materialFolder.add(material, "metalness", 0, 1, 0.001)
 
 /* 
 hemisphere and ambient light GUI
@@ -71,17 +70,14 @@ hemisphereLightFolder
 	.add(hemisphereLightHelper, "visible")
 	.name("Helper Visible");
 hemisphereLightFolder
-	.add(hemisphereLight, "intensity", 0, 1, 0.001)
+	.add(hemisphereLight, "intensity", 0, 4, 0.001)
 	.name("Intensity");
 hemisphereLightFolder
 	.add(hemisphereLight.position, "x", -5, 10, 0.001)
-	.name("X");
 hemisphereLightFolder
 	.add(hemisphereLight.position, "y", -5, 10, 0.001)
-	.name("Y");
 hemisphereLightFolder
 	.add(hemisphereLight.position, "z", -5, 10, 0.001)
-	.name("Z");
 hemisphereLightFolder
 	.addColor(lightColors, "sky")
 	.name("Sky Color")
@@ -97,7 +93,7 @@ hemisphereLightFolder
 
 const ambientFolder = gui.addFolder("Ambient Light");
 ambientFolder.add(ambientLight, "visible").name("Visible");
-ambientFolder.add(ambientLight, "intensity", 0, 1, 0.001).name("Intensity");
+ambientFolder.add(ambientLight, "intensity", 0, 3, 0.001).name("Intensity");
 ambientFolder.addColor(lightColors, "ambient").onChange(() => {
 	ambientLight.color.set(lightColors.ambient);
 });

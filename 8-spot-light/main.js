@@ -3,6 +3,8 @@ import { RectAreaLightHelper } from "three/addons/helpers/RectAreaLightHelper.js
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.18/+esm";
 
+THREE.ColorManagement.enabled = false
+
 const gui = new GUI();
 
 const canvas = document.querySelector("canvas");
@@ -30,7 +32,7 @@ const penumbra = 0.5;
 const decay = 0;
 const spotLight = new THREE.SpotLight(
 	0x1fc600,
-	0.5,
+	1,
 	distance,
 	Math.PI / angle,
 	penumbra,
@@ -44,6 +46,7 @@ const ambientLight = new THREE.AmbientLight(0x404040, 0);
 scene.add(ambientLight);
 
 const renderer = new THREE.WebGLRenderer({ canvas });
+renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
@@ -54,19 +57,15 @@ const material = new THREE.MeshStandardMaterial({
 	metalness: 0,
 });
 const materialFolder = gui.addFolder("Material");
-materialFolder.add(material, "roughness", 0, 1, 0.001).onChange((value) => {
-	material.roughness = value;
-});
-materialFolder.add(material, "metalness", 0, 1, 0.001).onChange((value) => {
-	material.metalness = value;
-});
+materialFolder.add(material, "roughness", 0, 1, 0.001)
+materialFolder.add(material, "metalness", 0, 1, 0.001)
 
 /* 
 spot light GUI
 */
 const spotLightFolder = gui.addFolder("Spot Light");
 spotLightFolder.add(spotLight, "visible");
-spotLightFolder.add(spotLight, "intensity", 0, 3, 0.001);
+spotLightFolder.add(spotLight, "intensity", 0, 5, 0.001);
 spotLightFolder.addColor(spotLight, "color").onChange((value) => {
 	spotLight.color.set(value);
 });

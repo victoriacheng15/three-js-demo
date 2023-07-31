@@ -2,6 +2,8 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.18/+esm";
 
+THREE.ColorManagement.enabled = false;
+
 const gui = new GUI();
 
 const canvas = document.querySelector("canvas");
@@ -35,6 +37,7 @@ gui.add(light.position, "y", -10, 10, 0.001).name("Light y position");
 gui.add(light.position, "z", -10, 10, 0.001).name("Light z position");
 
 const renderer = new THREE.WebGLRenderer({ canvas });
+renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 

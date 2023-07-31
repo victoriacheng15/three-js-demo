@@ -2,6 +2,8 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.18/+esm";
 
+THREE.ColorManagement.enabled = false;
+
 const gui = new GUI();
 
 const canvas = document.querySelector("canvas");
@@ -19,32 +21,29 @@ const camera = new THREE.PerspectiveCamera(
 	0.1,
 	1000,
 );
-
-camera.position.set(0, 0, 15);
+camera.position.set(7, 7, 20);
 scene.add(camera);
 
-const light = new THREE.DirectionalLight(0xffffff, 3);
-light.position.set(1, 1, 1).normalize();
+const light = new THREE.DirectionalLight(0xffffff, 5);
+light.position.set(3, 4, 5);
 scene.add(light);
 
 const renderer = new THREE.WebGLRenderer({ canvas });
+renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 const controls = new OrbitControls(camera, canvas);
 
 const total = -3;
-const offset = 4;
+const offset = 5;
 const material = new THREE.MeshStandardMaterial({
 	color: 0x1ea8fc,
 	wireframe: false,
 });
 gui.add(material, "wireframe");
 gui.add(light, "visible").name("light visible");
-gui.add(light, "intensity").min(0).max(5).step(0.001).name("");
-
-// const axesHelper = new THREE.AxesHelper(5);
-// scene.add(axesHelper);
+gui.add(light, "intensity", 0, 8, 0.001);
 
 function objectPosition(obj, position, y = 0) {
 	return obj.position.set(total + offset * position, y, 0);
@@ -70,36 +69,18 @@ const boxGeometry = new THREE.BoxGeometry(
 const box = new THREE.Mesh(boxGeometry, material);
 objectPosition(box, 0, 8);
 
-const boxSize = gui.addFolder("adjust box");
+const boxSize = gui.addFolder("box");
+boxSize.add(boxParameters, "width", 0.5, 5, 0.001).onChange((valueue) => {
+	box.scale.x = valueue;
+});
+boxSize.add(boxParameters, "height", 0.5, 5, 0.001).onChange((valueue) => {
+	box.scale.y = valueue;
+});
+boxSize.add(boxParameters, "depth", 0.5, 5, 0.001).onChange((valueue) => {
+	box.scale.z = valueue;
+});
 boxSize
-	.add(boxParameters, "width")
-	.min(0.5)
-	.max(5)
-	.step(0.01)
-	.onChange((valueue) => {
-		box.scale.x = valueue;
-	});
-boxSize
-	.add(boxParameters, "height")
-	.min(0.5)
-	.max(5)
-	.step(0.01)
-	.onChange((valueue) => {
-		box.scale.y = valueue;
-	});
-boxSize
-	.add(boxParameters, "depth")
-	.min(0.5)
-	.max(5)
-	.step(0.01)
-	.onChange((valueue) => {
-		box.scale.z = valueue;
-	});
-boxSize
-	.add(boxParameters, "widthSegments")
-	.min(1)
-	.max(10)
-	.step(0.01)
+	.add(boxParameters, "widthSegments", 1, 10, 0.001)
 	.onChange((valueue) => {
 		box.geometry.dispose(); // Dispose of the old geometry
 		box.geometry = new THREE.BoxGeometry(
@@ -112,10 +93,7 @@ boxSize
 		);
 	});
 boxSize
-	.add(boxParameters, "heightSegments")
-	.min(1)
-	.max(10)
-	.step(0.01)
+	.add(boxParameters, "heightSegments", 1, 10, 0.001)
 	.onChange((valueue) => {
 		box.geometry.dispose(); // Dispose of the old geometry
 		box.geometry = new THREE.BoxGeometry(
@@ -128,10 +106,7 @@ boxSize
 		);
 	});
 boxSize
-	.add(boxParameters, "depthSegments")
-	.min(1)
-	.max(10)
-	.step(0.01)
+	.add(boxParameters, "depthSegments", 1, 10, 0.001)
 	.onChange((valueue) => {
 		box.geometry.dispose(); // Dispose of the old geometry
 		box.geometry = new THREE.BoxGeometry(
@@ -160,28 +135,20 @@ const capsuleGeometry = new THREE.CapsuleGeometry(
 const capsule = new THREE.Mesh(capsuleGeometry, material);
 objectPosition(capsule, 1, 8);
 
-const capsuleSize = gui.addFolder("adjust capsule");
+const capsuleSize = gui.addFolder("capsule");
 capsuleSize
-	.add(capsuleParameters, "radius")
-	.min(0.5)
-	.max(5)
-	.step(0.01)
+	.add(capsuleParameters, "radius", 0.5, 5, 0.001)
 	.onChange((valueue) => {
 		capsule.scale.x = valueue;
+		capsule.scale.z = valueue;
 	});
 capsuleSize
-	.add(capsuleParameters, "length")
-	.min(0.5)
-	.max(5)
-	.step(0.01)
+	.add(capsuleParameters, "length", 0.5, 5, 0.001)
 	.onChange((valueue) => {
 		capsule.scale.y = valueue;
 	});
 capsuleSize
-	.add(capsuleParameters, "radialSegments")
-	.min(1)
-	.max(20)
-	.step(0.01)
+	.add(capsuleParameters, "radialSegments", 1, 20, 0.001)
 	.onChange((valueue) => {
 		capsule.geometry.dispose(); // Dispose of the old geometry
 		capsule.geometry = new THREE.CapsuleGeometry(
@@ -192,10 +159,7 @@ capsuleSize
 		);
 	});
 capsuleSize
-	.add(capsuleParameters, "capSegments")
-	.min(1)
-	.max(20)
-	.step(0.01)
+	.add(capsuleParameters, "capSegments", 1, 20, 0.001)
 	.onChange((valueue) => {
 		capsule.geometry.dispose(); // Dispose of the old geometry
 		capsule.geometry = new THREE.CapsuleGeometry(
@@ -222,20 +186,12 @@ const circleGeometry = new THREE.CircleGeometry(
 const circle = new THREE.Mesh(circleGeometry, material);
 objectPosition(circle, 2, 8);
 
-const circleFolder = gui.addFolder("adjust circle");
+const circleFolder = gui.addFolder("circle");
+circleFolder.add(circleParamters, "radius", 0.5, 5, 0.001).onChange((value) => {
+	circle.scale.set(value, value);
+});
 circleFolder
-	.add(circleParamters, "radius")
-	.min(1)
-	.max(10)
-	.step(0.01)
-	.onChange((value) => {
-		circle.scale.set(value, value);
-	});
-circleFolder
-	.add(circleParamters, "segments")
-	.min(1)
-	.max(50)
-	.step(0.01)
+	.add(circleParamters, "segments", 1, 20, 0.001)
 	.onChange((value) => {
 		circle.geometry.dispose();
 		circle.geometry = new THREE.CircleGeometry(
@@ -246,10 +202,7 @@ circleFolder
 		);
 	});
 circleFolder
-	.add(circleParamters, "thetaStart")
-	.min(1)
-	.max(20)
-	.step(0.01)
+	.add(circleParamters, "thetaStart", 1, 20, 0.001)
 	.onChange((value) => {
 		circle.geometry.dispose();
 		circle.geometry = new THREE.CircleGeometry(
@@ -260,10 +213,7 @@ circleFolder
 		);
 	});
 circleFolder
-	.add(circleParamters, "thetaStart")
-	.min(1)
-	.max(20)
-	.step(0.01)
+	.add(circleParamters, "thetaStart", 1, 20, 0.001)
 	.onChange((value) => {
 		circle.geometry.dispose();
 		circle.geometry = new THREE.CircleGeometry(
@@ -290,28 +240,15 @@ const coneGeometry = new THREE.ConeGeometry(
 const cone = new THREE.Mesh(coneGeometry, material);
 objectPosition(cone, 0, 3);
 
-const coneFolder = gui.addFolder("adjust cone");
+const coneFolder = gui.addFolder("cone");
+coneFolder.add(coneParamters, "radius", 1, 10, 0.001).onChange((value) => {
+	cone.scale.set(value, coneParamters.height);
+});
+coneFolder.add(coneParamters, "height", 1, 10, 0.001).onChange((value) => {
+	cone.scale.set(coneParamters.radius, value);
+});
 coneFolder
-	.add(coneParamters, "radius")
-	.min(1)
-	.max(10)
-	.step(0.01)
-	.onChange((value) => {
-		cone.scale.set(value, coneParamters.height);
-	});
-coneFolder
-	.add(coneParamters, "height")
-	.min(1)
-	.max(10)
-	.step(0.01)
-	.onChange((value) => {
-		cone.scale.set(coneParamters.radius, value);
-	});
-coneFolder
-	.add(coneParamters, "radialSegments")
-	.min(1)
-	.max(50)
-	.step(0.01)
+	.add(coneParamters, "radialSegments", 3, 30, 0.001)
 	.onChange((value) => {
 		cone.geometry.dispose();
 		cone.geometry = new THREE.ConeGeometry(
@@ -322,10 +259,7 @@ coneFolder
 		);
 	});
 coneFolder
-	.add(coneParamters, "heightSegments")
-	.min(1)
-	.max(50)
-	.step(0.01)
+	.add(coneParamters, "heightSegments", 1, 30, 0.001)
 	.onChange((value) => {
 		cone.geometry.dispose();
 		cone.geometry = new THREE.ConeGeometry(
@@ -347,13 +281,10 @@ const cylinderParameters = {
 const cylinderGeometry = new THREE.CylinderGeometry(0.5, 0.5, 2, 32);
 const cylinder = new THREE.Mesh(cylinderGeometry, material);
 objectPosition(cylinder, 1, 3);
-const cylinderFolder = gui.addFolder("adjust cylinder");
+const cylinderFolder = gui.addFolder("cylinder");
 
 cylinderFolder
-	.add(cylinderParameters, "radiusTop")
-	.min(0.1)
-	.max(10)
-	.step(0.01)
+	.add(cylinderParameters, "radiusTop", 0.5, 10, 0.001)
 	.onChange((value) => {
 		cylinder.geometry.dispose();
 		cylinder.geometry = new THREE.CylinderGeometry(
@@ -365,10 +296,7 @@ cylinderFolder
 		);
 	});
 cylinderFolder
-	.add(cylinderParameters, "radiusBottom")
-	.min(0.1)
-	.max(10)
-	.step(0.01)
+	.add(cylinderParameters, "radiusBottom", 0.5, 10, 0.001)
 	.onChange((value) => {
 		cylinder.geometry.dispose();
 		cylinder.geometry = new THREE.CylinderGeometry(
@@ -380,10 +308,7 @@ cylinderFolder
 		);
 	});
 cylinderFolder
-	.add(cylinderParameters, "height")
-	.min(0.1)
-	.max(10)
-	.step(0.01)
+	.add(cylinderParameters, "height", 0.5, 10, 0.001)
 	.onChange((value) => {
 		cylinder.geometry.dispose();
 		cylinder.geometry = new THREE.CylinderGeometry(
@@ -395,10 +320,7 @@ cylinderFolder
 		);
 	});
 cylinderFolder
-	.add(cylinderParameters, "radialSegments")
-	.min(3)
-	.max(100)
-	.step(0.01)
+	.add(cylinderParameters, "radialSegments", 3, 30, 0.001)
 	.onChange((value) => {
 		cylinder.geometry.dispose();
 		cylinder.geometry = new THREE.CylinderGeometry(
@@ -410,10 +332,7 @@ cylinderFolder
 		);
 	});
 cylinderFolder
-	.add(cylinderParameters, "heightSegments")
-	.min(1)
-	.max(50)
-	.step(0.01)
+	.add(cylinderParameters, "heightSegments", 1, 30, 0.001)
 	.onChange((value) => {
 		cylinder.geometry.dispose();
 		cylinder.geometry = new THREE.CylinderGeometry(
@@ -437,12 +356,9 @@ const dodecahedronGeometry = new THREE.DodecahedronGeometry(
 const dodecahedron = new THREE.Mesh(dodecahedronGeometry, material);
 objectPosition(dodecahedron, 2, 3);
 
-const dodecahedronFolder = gui.addFolder("adjust dodechedron");
+const dodecahedronFolder = gui.addFolder("dodechedron");
 dodecahedronFolder
-	.add(dodecahedronParameters, "radius")
-	.min(0.5)
-	.max(10)
-	.step(0.01)
+	.add(dodecahedronParameters, "radius", 0.5, 10, 0.001)
 	.onChange((valueue) => {
 		dodecahedron.geometry.dispose();
 		dodecahedron.geometry = new THREE.DodecahedronGeometry(
@@ -451,10 +367,7 @@ dodecahedronFolder
 		);
 	});
 dodecahedronFolder
-	.add(dodecahedronParameters, "detail")
-	.min(0)
-	.max(10)
-	.step(1)
+	.add(dodecahedronParameters, "detail", 1, 10, 1)
 	.onChange((valueue) => {
 		dodecahedron.geometry.dispose();
 		dodecahedron.geometry = new THREE.DodecahedronGeometry(
@@ -465,7 +378,7 @@ dodecahedronFolder
 
 const icosahedroneParameters = {
 	radius: 1,
-	detail: 0,
+	detail: 1,
 };
 
 const icosahedronGeometry = new THREE.IcosahedronGeometry(
@@ -475,29 +388,23 @@ const icosahedronGeometry = new THREE.IcosahedronGeometry(
 const icosahedrone = new THREE.Mesh(icosahedronGeometry, material);
 objectPosition(icosahedrone, 0, -3);
 
-const icosahedroneFolder = gui.addFolder("adjust icosahedrone");
+const icosahedroneFolder = gui.addFolder("icosahedrone");
 icosahedroneFolder
-	.add(icosahedroneParameters, "radius")
-	.min(0.5)
-	.max(10)
-	.step(0.01)
-	.onChange((valueue) => {
+	.add(icosahedroneParameters, "radius", 0.5, 10, 0.001)
+	.onChange((value) => {
 		icosahedrone.geometry.dispose();
 		icosahedrone.geometry = new THREE.IcosahedronGeometry(
-			valueue,
+			value, // New radius
 			icosahedroneParameters.detail,
 		);
 	});
 icosahedroneFolder
-	.add(icosahedroneParameters, "detail")
-	.min(0)
-	.max(10)
-	.step(1)
-	.onChange((valueue) => {
+	.add(icosahedroneParameters, "detail", 1, 10, 1)
+	.onChange((value) => {
 		icosahedrone.geometry.dispose();
 		icosahedrone.geometry = new THREE.IcosahedronGeometry(
 			icosahedroneParameters.radius,
-			valueue,
+			value, // New detail
 		);
 	});
 
@@ -513,12 +420,9 @@ const octahedronGeometry = new THREE.OctahedronGeometry(
 const octahedrone = new THREE.Mesh(octahedronGeometry, material);
 objectPosition(octahedrone, 1, -3);
 
-const octahedroneFolder = gui.addFolder("adjust octahedrone");
+const octahedroneFolder = gui.addFolder("octahedrone");
 octahedroneFolder
-	.add(octahedroneParameters, "radius")
-	.min(0.5)
-	.max(10)
-	.step(0.01)
+	.add(octahedroneParameters, "radius", 0.5, 10, 0.001)
 	.onChange((valueue) => {
 		octahedrone.geometry.dispose();
 		octahedrone.geometry = new THREE.IcosahedronGeometry(
@@ -527,10 +431,7 @@ octahedroneFolder
 		);
 	});
 octahedroneFolder
-	.add(octahedroneParameters, "detail")
-	.min(0)
-	.max(10)
-	.step(1)
+	.add(octahedroneParameters, "detail", 1, 10, 1)
 	.onChange((valueue) => {
 		octahedrone.geometry.dispose();
 		octahedrone.geometry = new THREE.IcosahedronGeometry(
@@ -542,102 +443,66 @@ octahedroneFolder
 const ringParameters = {
 	innerRadius: 0.5,
 	outerRadius: 1,
-	thetaSegments: 32,
-	phiSegmensts: 1,
+	thetaSegments: 12,
 };
 
 const ringGeometry = new THREE.RingGeometry(
 	ringParameters.innerRadius,
 	ringParameters.outerRadius,
 	ringParameters.thetaSegments,
-	ringParameters.phiSegmensts,
 );
 const ring = new THREE.Mesh(ringGeometry, material);
 objectPosition(ring, 2, -3);
 
-const ringFolder = gui.addFolder("Adjust Ring");
+const ringFolder = gui.addFolder("Ring");
 ringFolder
-	.add(ringParameters, "innerRadius")
-	.min(0.1)
-	.max(10)
-	.step(0.01)
+	.add(ringParameters, "innerRadius", 0.5, 10, 0.001)
 	.onChange((value) => {
 		ring.geometry.dispose(); // Dispose of the old geometry
 		ring.geometry = new THREE.RingGeometry(
 			value, // New innerRadius
 			ringParameters.outerRadius,
 			ringParameters.thetaSegments,
-			ringParameters.phiSegments,
 		);
 	});
 ringFolder
-	.add(ringParameters, "outerRadius")
-	.min(0.1)
-	.max(10)
-	.step(0.01)
+	.add(ringParameters, "outerRadius", 0.5, 10, 0.001)
 	.onChange((value) => {
 		ring.geometry.dispose();
 		ring.geometry = new THREE.RingGeometry(
 			ringParameters.innerRadius,
 			value,
 			ringParameters.thetaSegments,
-			ringParameters.phiSegments,
 		);
 	});
-ringFolder
-	.add(ringParameters, "thetaSegments")
-	.min(3)
-	.max(50)
-	.step(1)
-	.onChange((value) => {
-		ring.geometry.dispose();
-		y;
-		ring.geometry = new THREE.RingGeometry(
-			ringParameters.innerRadius,
-			ringParameters.outerRadius,
-			value,
-			ringParameters.phiSegments,
-		);
-	});
+ringFolder.add(ringParameters, "thetaSegments", 4, 40, 1).onChange((value) => {
+	ring.geometry.dispose();
+	ring.geometry = new THREE.RingGeometry(
+		ringParameters.innerRadius,
+		ringParameters.outerRadius,
+		value,
+	);
+});
 
 const tetrahedronGeometry = new THREE.TetrahedronGeometry(0.75, 0);
 const tetrahedron = new THREE.Mesh(tetrahedronGeometry, material);
 objectPosition(tetrahedron, 0, -8);
 
-const tetrahedronFolder = gui.addFolder("Adjust Tetrahedron");
-tetrahedronFolder
-	.add(tetrahedron.scale, "x")
-	.min(0.1)
-	.max(5)
-	.step(0.1)
-	.name("Scale X");
-tetrahedronFolder
-	.add(tetrahedron.scale, "y")
-	.min(0.1)
-	.max(5)
-	.step(0.1)
-	.name("Scale Y");
-tetrahedronFolder
-	.add(tetrahedron.scale, "z")
-	.min(0.1)
-	.max(5)
-	.step(0.1)
-	.name("Scale Z");
+const tetrahedronFolder = gui.addFolder("Tetrahedron");
+tetrahedronFolder.add(tetrahedron.scale, "x", 0.1, 5, 0.001).name("Scale X");
+tetrahedronFolder.add(tetrahedron.scale, "y", 0.1, 5, 0.001).name("Scale Y");
+tetrahedronFolder.add(tetrahedron.scale, "z", 0.1, 5, 0.001).name("Scale Z");
 
 const torusGeometry = new THREE.TorusGeometry(0.5, 0.25, 6, 24);
 const torus = new THREE.Mesh(torusGeometry, material);
 objectPosition(torus, 1, -8);
 
-const torusFolder = gui.addFolder("Adjust Torus");
-torusFolder.add(torus.scale, "x").min(0.1).max(5).step(0.1).name("Scale X");
-torusFolder.add(torus.scale, "y").min(0.1).max(5).step(0.1).name("Scale Y");
-torusFolder.add(torus.scale, "z").min(0.1).max(5).step(0.1).name("Scale Z");
+const torusFolder = gui.addFolder("Torus");
+torusFolder.add(torus.scale, "x", 0.1, 5, 0.001).name("Scale X");
+torusFolder.add(torus.scale, "y", 0.1, 5, 0.001).name("Scale Y");
+torusFolder.add(torus.scale, "z", 0.1, 5, 0.001).name("Scale Z");
 torusFolder
-	.add(torusGeometry.parameters, "radius")
-	.min(0.1)
-	.max(5)
-	.step(0.1)
-	.name("Radius")
+	.add(torusGeometry.parameters, "radius", 0.5, 5, 0.001)
 	.onChange(() => {
 		torus.geometry.dispose();
 		torus.geometry = new THREE.TorusGeometry(
@@ -648,11 +513,7 @@ torusFolder
 		);
 	});
 torusFolder
-	.add(torusGeometry.parameters, "tube")
-	.min(0.01)
-	.max(2)
-	.step(0.01)
-	.name("Tube")
+	.add(torusGeometry.parameters, "tube", 0.5, 5, 0.001)
 	.onChange(() => {
 		torus.geometry.dispose();
 		torus.geometry = new THREE.TorusGeometry(
@@ -663,10 +524,7 @@ torusFolder
 		);
 	});
 torusFolder
-	.add(torusGeometry.parameters, "radialSegments")
-	.min(3)
-	.max(50)
-	.step(1)
+	.add(torusGeometry.parameters, "radialSegments", 3, 50, 1)
 	.name("Radial Segments")
 	.onChange(() => {
 		torus.geometry.dispose();
@@ -678,10 +536,7 @@ torusFolder
 		);
 	});
 torusFolder
-	.add(torusGeometry.parameters, "tubularSegments")
-	.min(3)
-	.max(50)
-	.step(1)
+	.add(torusGeometry.parameters, "tubularSegments", 3, 50, 1)
 	.name("Tubular Segments")
 	.onChange(() => {
 		torus.geometry.dispose();
@@ -697,31 +552,12 @@ const torusKnotGeometry = new THREE.TorusKnotGeometry(0.5, 0.15, 65, 8);
 const torusKnot = new THREE.Mesh(torusKnotGeometry, material);
 objectPosition(torusKnot, 2, -8);
 
-const torusKnotFolder = gui.addFolder("Adjust Torus Knot");
+const torusKnotFolder = gui.addFolder("Torus Knot");
+torusKnotFolder.add(torusKnot.scale, "x", 0.25, 5, 0.001).name("Scale X");
+torusKnotFolder.add(torusKnot.scale, "y", 0.25, 5, 0.001).name("Scale Y");
+torusKnotFolder.add(torusKnot.scale, "z", 0.25, 5, 0.001).name("Scale Z");
 torusKnotFolder
-	.add(torusKnot.scale, "x")
-	.min(0.1)
-	.max(5)
-	.step(0.1)
-	.name("Scale X");
-torusKnotFolder
-	.add(torusKnot.scale, "y")
-	.min(0.1)
-	.max(5)
-	.step(0.1)
-	.name("Scale Y");
-torusKnotFolder
-	.add(torusKnot.scale, "z")
-	.min(0.1)
-	.max(5)
-	.step(0.1)
-	.name("Scale Z");
-torusKnotFolder
-	.add(torusKnotGeometry.parameters, "radius")
-	.min(0.1)
-	.max(5)
-	.step(0.1)
-	.name("Radius")
+	.add(torusKnotGeometry.parameters, "radius", 0.25, 5, 0.001)
 	.onChange(() => {
 		torusKnot.geometry.dispose();
 		torusKnot.geometry = new THREE.TorusKnotGeometry(
@@ -732,11 +568,7 @@ torusKnotFolder
 		);
 	});
 torusKnotFolder
-	.add(torusKnotGeometry.parameters, "tube")
-	.min(0.01)
-	.max(2)
-	.step(0.01)
-	.name("Tube")
+	.add(torusKnotGeometry.parameters, "tube", 0.25, 5, 0.001)
 	.onChange(() => {
 		torusKnot.geometry.dispose();
 		torusKnot.geometry = new THREE.TorusKnotGeometry(
@@ -747,10 +579,7 @@ torusKnotFolder
 		);
 	});
 torusKnotFolder
-	.add(torusKnotGeometry.parameters, "tubularSegments")
-	.min(3)
-	.max(50)
-	.step(1)
+	.add(torusKnotGeometry.parameters, "tubularSegments", 3, 40, 1)
 	.name("Tubular Segments")
 	.onChange(() => {
 		torusKnot.geometry.dispose();
@@ -762,10 +591,7 @@ torusKnotFolder
 		);
 	});
 torusKnotFolder
-	.add(torusKnotGeometry.parameters, "radialSegments")
-	.min(3)
-	.max(50)
-	.step(1)
+	.add(torusKnotGeometry.parameters, "radialSegments", 3, 40, 1)
 	.name("Radial Segments")
 	.onChange(() => {
 		torusKnot.geometry.dispose();
@@ -802,11 +628,6 @@ const tick = () => {
 	const elapsedTime = clock.getElapsedTime();
 	// update controls
 	controls.update();
-
-	// for (const shape of shapes) {
-	//   shape.rotation.x = elapsedTime * 0.25;
-	//   shape.rotation.y = elapsedTime * 0.25;
-	// }
 
 	//render
 	renderer.render(scene, camera);
