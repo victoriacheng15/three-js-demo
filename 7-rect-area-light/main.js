@@ -3,6 +3,8 @@ import { RectAreaLightHelper } from "three/addons/helpers/RectAreaLightHelper.js
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.18/+esm";
 
+THREE.ColorManagement.enabled = false;
+
 const gui = new GUI();
 
 const canvas = document.querySelector("canvas");
@@ -24,7 +26,7 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.set(3, 4, 5);
 scene.add(camera);
 
-const intensity = 0.5;
+const intensity = 2;
 const width = 1;
 const height = 1;
 const rectAreaLight = new THREE.RectAreaLight(
@@ -40,6 +42,7 @@ const ambientLight = new THREE.AmbientLight(0x404040, 0);
 scene.add(ambientLight);
 
 const renderer = new THREE.WebGLRenderer({ canvas });
+renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
@@ -50,19 +53,15 @@ const material = new THREE.MeshStandardMaterial({
 	metalness: 0,
 });
 const materialFolder = gui.addFolder("Material");
-materialFolder.add(material, "roughness", 0, 1, 0.001).onChange((value) => {
-	material.roughness = value;
-});
-materialFolder.add(material, "metalness", 0, 1, 0.001).onChange((value) => {
-	material.metalness = value;
-});
+materialFolder.add(material, "roughness", 0, 1, 0.001);
+materialFolder.add(material, "metalness", 0, 1, 0.001);
 
 /* 
 react area light GUI
 */
 const rectAreaLightFolder = gui.addFolder("React Area Light");
 rectAreaLightFolder.add(rectAreaLight, "visible");
-rectAreaLightFolder.add(rectAreaLight, "intensity", 0, 3, 0.001);
+rectAreaLightFolder.add(rectAreaLight, "intensity", 0, 5, 0.001);
 rectAreaLightFolder.addColor(rectAreaLight, "color").onChange((value) => {
 	reactAreaLight.color.set(value);
 });

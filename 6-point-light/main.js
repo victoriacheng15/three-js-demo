@@ -2,6 +2,8 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.18/+esm";
 
+THREE.ColorManagement.enabled = false;
+
 const gui = new GUI();
 
 const canvas = document.querySelector("canvas");
@@ -31,11 +33,11 @@ const lightParameters = {
 
 const pointLight = new THREE.PointLight(
 	lightParameters.point,
-	0.5,
+	1,
 	lightParameters.distance,
 	2,
 );
-const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.25);
+const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.5);
 pointLight.position.set(0, 2, 0);
 scene.add(pointLight, pointLightHelper);
 
@@ -43,6 +45,7 @@ const ambientLight = new THREE.AmbientLight(lightParameters.ambient, 0);
 scene.add(ambientLight);
 
 const renderer = new THREE.WebGLRenderer({ canvas });
+renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
@@ -53,23 +56,19 @@ const material = new THREE.MeshStandardMaterial({
 	metalness: 0,
 });
 const materialFolder = gui.addFolder("Material");
-materialFolder.add(material, "roughness", 0, 1, 0.001).onChange((value) => {
-	material.roughness = value;
-});
-materialFolder.add(material, "metalness", 0, 1, 0.001).onChange((value) => {
-	material.metalness = value;
-});
+materialFolder.add(material, "roughness", 0, 1, 0.001);
+materialFolder.add(material, "metalness", 0, 1, 0.001);
 
 /* 
 point light GUI
 */
 const pointLightFolder = gui.addFolder("Point Light");
-pointLightFolder.add(pointLight, "intensity", 0, 4, 0.001);
+pointLightFolder.add(pointLight, "intensity", 0, 10, 0.001);
 pointLightFolder.addColor(lightParameters, "point").onChange(() => {
 	pointLight.color.set(lightParameters.point);
 });
 pointLightFolder
-	.add(lightParameters, "distance", 0, 30, 0.001)
+	.add(lightParameters, "distance", 1, 30, 0.001)
 	.onChange((value) => {
 		pointLight.distance = value;
 	});
@@ -78,8 +77,8 @@ pointLightFolder.add(pointLight.position, "y", -5, 10);
 pointLightFolder.add(pointLight.position, "z", -5, 10);
 
 const ambientFolder = gui.addFolder("Ambient Light");
-ambientFolder.add(ambientLight, "visible").name("Visible");
-ambientFolder.add(ambientLight, "intensity", 0, 1, 0.001).name("Intensity");
+ambientFolder.add(ambientLight, "visible");
+ambientFolder.add(ambientLight, "intensity", 0, 1, 0.001);
 ambientFolder.addColor(lightParameters, "ambient").onChange(() => {
 	ambientLight.color.set(lightParameters.ambient);
 });
