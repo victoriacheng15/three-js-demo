@@ -4,7 +4,7 @@ import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.18/+esm";
 
 THREE.ColorManagement.enabled = false;
 
-const gui = new GUI();
+const gui = new GUI({ closeFolders: true });
 
 const canvas = document.querySelector("canvas");
 const scene = new THREE.Scene();
@@ -123,7 +123,7 @@ const capsuleParameters = {
 	radius: 0.5,
 	length: 0.5,
 	capSegments: 1,
-	radialSegments: 4,
+	radialSegments: 5,
 };
 
 const capsuleGeometry = new THREE.CapsuleGeometry(
@@ -148,7 +148,7 @@ capsuleSize
 		capsule.scale.y = valueue;
 	});
 capsuleSize
-	.add(capsuleParameters, "radialSegments", 1, 20, 0.001)
+	.add(capsuleParameters, "radialSegments", 5, 20, 0.001)
 	.onChange((valueue) => {
 		capsule.geometry.dispose(); // Dispose of the old geometry
 		capsule.geometry = new THREE.CapsuleGeometry(
@@ -159,7 +159,7 @@ capsuleSize
 		);
 	});
 capsuleSize
-	.add(capsuleParameters, "capSegments", 1, 20, 0.001)
+	.add(capsuleParameters, "capSegments", 3, 20, 0.001)
 	.onChange((valueue) => {
 		capsule.geometry.dispose(); // Dispose of the old geometry
 		capsule.geometry = new THREE.CapsuleGeometry(

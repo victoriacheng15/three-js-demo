@@ -22,7 +22,7 @@ const camera = new THREE.PerspectiveCamera(
 	5000,
 );
 
-camera.position.set(0, 5, 12);
+camera.position.set(5, 5, 15);
 scene.add(camera);
 
 const light = new THREE.DirectionalLight(0xfdf4dc, 1);
