@@ -209,7 +209,7 @@ const circleParamters = {
 	radius: 1,
 	segments: 16,
 	thetaStart: 0,
-	thetaLength: 0.25
+	thetaLength: 0.25,
 };
 
 const circleGeometry = new THREE.CircleGeometry(

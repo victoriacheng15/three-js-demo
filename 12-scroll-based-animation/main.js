@@ -8,7 +8,7 @@ const gui = new GUI();
 const parameters = {
 	materialColor: "#ffeded",
 	particlesCount: 300,
-	size: 0.01
+	size: 0.01,
 };
 
 const canvas = document.querySelector("canvas");
@@ -55,7 +55,10 @@ const material = new THREE.MeshToonMaterial({
 	gradientMap: gradients,
 });
 
-const mesh1 = new THREE.Mesh(new THREE.TorusGeometry(0.75, 0.3, 16, 60), material);
+const mesh1 = new THREE.Mesh(
+	new THREE.TorusGeometry(0.75, 0.3, 16, 60),
+	material,
+);
 const mesh2 = new THREE.Mesh(new THREE.ConeGeometry(1, 1.75, 32), material);
 const mesh3 = new THREE.Mesh(
 	new THREE.TorusKnotGeometry(0.6, 0.25, 100, 16),
@@ -71,9 +74,8 @@ mesh1.position.y = -objectDistance * 0;
 mesh2.position.y = -objectDistance * 1;
 mesh3.position.y = -objectDistance * 2;
 
-
 for (const mesh of meshes) {
-	scene.add(mesh)
+	scene.add(mesh);
 }
 
 let particlesGeometry = null;
@@ -82,18 +84,19 @@ let particles = null;
 
 const generateParticles = () => {
 	if (particles) {
-		particlesGeometry.dispose()
-		particlesMaterial.dispose()
-		scene.remove(particles)
+		particlesGeometry.dispose();
+		particlesMaterial.dispose();
+		scene.remove(particles);
 	}
 
 	particlesGeometry = new THREE.BufferGeometry();
-	const positions = new Float32Array(parameters.particlesCount * 3)
+	const positions = new Float32Array(parameters.particlesCount * 3);
 
 	for (let i = 0; i < parameters.particlesCount; i++) {
-		positions[i * 3 + 0] = (Math.random() - 0.5) * 15
-		positions[i * 3 + 1] = objectDistance * 0.5 - Math.random() * objectDistance * meshes.length
-		positions[i * 3 + 2] = (Math.random() - 0.5) * 5
+		positions[i * 3 + 0] = (Math.random() - 0.5) * 15;
+		positions[i * 3 + 1] =
+			objectDistance * 0.5 - Math.random() * objectDistance * meshes.length;
+		positions[i * 3 + 2] = (Math.random() - 0.5) * 5;
 	}
 
 	particlesGeometry.setAttribute(
@@ -111,17 +114,19 @@ const generateParticles = () => {
 
 	particles = new THREE.Points(particlesGeometry, particlesMaterial);
 	scene.add(particles);
-}
+};
 
-generateParticles()
+generateParticles();
 
 gui.addColor(parameters, "materialColor").onChange(() => {
 	material.color.set(parameters.materialColor);
 	particlesMaterial.color.set(parameters.materialColor);
-})
-gui.add(light, "intensity", 1, 4, 0.01)
-gui.add(parameters, "particlesCount", 100, 10000, 100).onFinishChange(generateParticles)
-gui.add(parameters, "size", 0.01, 0.1, 0.01).onFinishChange(generateParticles)
+});
+gui.add(light, "intensity", 1, 4, 0.01);
+gui
+	.add(parameters, "particlesCount", 100, 10000, 100)
+	.onFinishChange(generateParticles);
+gui.add(parameters, "size", 0.01, 0.1, 0.01).onFinishChange(generateParticles);
 
 const cursor = {
 	x: 0,
@@ -132,7 +137,6 @@ window.addEventListener("mousemove", (event) => {
 	cursor.x = event.clientX / sizes.width - 0.5;
 	cursor.y = event.clientY / sizes.height - 0.5;
 });
-
 
 let scrollY = window.scrollY;
 let currentSection = 0;
@@ -146,13 +150,12 @@ window.addEventListener("scroll", () => {
 			duration: 1.5,
 			ease: "bounce.out",
 			z: "+=1.5",
-		})
+		});
 	}
-})
+});
 
 const clock = new THREE.Clock();
 let previousTime = 0;
-
 
 const tick = () => {
 	const elapsedTime = clock.getElapsedTime();
