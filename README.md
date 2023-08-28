@@ -11,3 +11,4 @@
 - [Shadows](https://victoriacheng15.github.io/three-js-demo/9-shadows)
 - [Particles](https://victoriacheng15.github.io/three-js-demo/10-particles)
 - [Scroll based animation](https://victoriacheng15.github.io/three-js-demo/12-scroll-based-animation)
+- [Water texture](https://victoriacheng15.github.io/three-js-demo/13-water-texture)
