@@ -70,14 +70,38 @@ const box = new THREE.Mesh(boxGeometry, material);
 objectPosition(box, 0, 8);
 
 const boxSize = gui.addFolder("box");
-boxSize.add(boxParameters, "width", 0.5, 5, 0.001).onChange((valueue) => {
-	box.scale.x = valueue;
+boxSize.add(boxParameters, "width", 0.5, 5, 0.001).onChange((value) => {
+	box.geometry.dispose(); // Dispose of the old geometry
+	box.geometry = new THREE.BoxGeometry(
+		value,
+		boxParameters.height,
+		boxParameters.depth,
+		boxParameters.widthSegments,
+		boxParameters.heightSegments,
+		boxParameters.depthSegments,
+	);
 });
-boxSize.add(boxParameters, "height", 0.5, 5, 0.001).onChange((valueue) => {
-	box.scale.y = valueue;
+boxSize.add(boxParameters, "height", 0.5, 5, 0.001).onChange((value) => {
+	box.geometry.dispose(); // Dispose of the old geometry
+	box.geometry = new THREE.BoxGeometry(
+		boxParameters.width,
+		value,
+		boxParameters.depth,
+		boxParameters.widthSegments,
+		boxParameters.heightSegments,
+		boxParameters.depthSegments,
+	);
 });
-boxSize.add(boxParameters, "depth", 0.5, 5, 0.001).onChange((valueue) => {
-	box.scale.z = valueue;
+boxSize.add(boxParameters, "depth", 0.5, 5, 0.001).onChange((value) => {
+	box.geometry.dispose(); // Dispose of the old geometry
+	box.geometry = new THREE.BoxGeometry(
+		boxParameters.width,
+		boxParameters.height,
+		value,
+		boxParameters.widthSegments,
+		boxParameters.heightSegments,
+		boxParameters.depthSegments,
+	);
 });
 boxSize
 	.add(boxParameters, "widthSegments", 1, 10, 0.001)
@@ -138,34 +162,45 @@ objectPosition(capsule, 1, 8);
 const capsuleSize = gui.addFolder("capsule");
 capsuleSize
 	.add(capsuleParameters, "radius", 0.5, 5, 0.001)
-	.onChange((valueue) => {
-		capsule.scale.x = valueue;
-		capsule.scale.z = valueue;
+	.onChange((value) => {
+		capsule.geometry.dispose(); // Dispose of the old geometry
+		capsule.geometry = new THREE.CapsuleGeometry(
+			value,
+			capsuleParameters.length,
+			capsuleParameters.capSegments,
+			capsuleParameters.radialSegments,
+		);
 	});
 capsuleSize
 	.add(capsuleParameters, "length", 0.5, 5, 0.001)
-	.onChange((valueue) => {
-		capsule.scale.y = valueue;
+	.onChange((value) => {
+		capsule.geometry.dispose(); // Dispose of the old geometry
+		capsule.geometry = new THREE.CapsuleGeometry(
+			capsuleParameters.radius,
+			value,
+			capsuleParameters.capSegments,
+			capsuleParameters.radialSegments,
+		);
 	});
 capsuleSize
 	.add(capsuleParameters, "radialSegments", 5, 20, 0.001)
-	.onChange((valueue) => {
+	.onChange((value) => {
 		capsule.geometry.dispose(); // Dispose of the old geometry
 		capsule.geometry = new THREE.CapsuleGeometry(
 			capsuleParameters.radius,
 			capsuleParameters.length,
 			capsuleParameters.capSegments,
-			valueue,
+			value,
 		);
 	});
 capsuleSize
 	.add(capsuleParameters, "capSegments", 3, 20, 0.001)
-	.onChange((valueue) => {
+	.onChange((value) => {
 		capsule.geometry.dispose(); // Dispose of the old geometry
 		capsule.geometry = new THREE.CapsuleGeometry(
 			capsuleParameters.radius,
 			capsuleParameters.length,
-			valueue,
+			value,
 			capsuleParameters.radialSegments,
 		);
 	});
@@ -173,8 +208,8 @@ capsuleSize
 const circleParamters = {
 	radius: 1,
 	segments: 16,
-	thetaStart: 1,
-	thetaLength: 2,
+	thetaStart: 0,
+	thetaLength: 0.25,
 };
 
 const circleGeometry = new THREE.CircleGeometry(
@@ -188,7 +223,13 @@ objectPosition(circle, 2, 8);
 
 const circleFolder = gui.addFolder("circle");
 circleFolder.add(circleParamters, "radius", 0.5, 5, 0.001).onChange((value) => {
-	circle.scale.set(value, value);
+	circle.geometry.dispose();
+	circle.geometry = new THREE.CircleGeometry(
+		value,
+		circleParamters.segments,
+		circleParamters.thetaStart,
+		circleParamters.thetaLength * Math.PI,
+	);
 });
 circleFolder
 	.add(circleParamters, "segments", 1, 20, 0.001)
@@ -198,36 +239,36 @@ circleFolder
 			circleParamters.radius,
 			value,
 			circleParamters.thetaStart,
-			circleParamters.thetaLength,
+			circleParamters.thetaLength * Math.PI,
 		);
 	});
 circleFolder
-	.add(circleParamters, "thetaStart", 1, 20, 0.001)
+	.add(circleParamters, "thetaStart", 0, 2, 0.001)
 	.onChange((value) => {
 		circle.geometry.dispose();
 		circle.geometry = new THREE.CircleGeometry(
 			circleParamters.radius,
 			circleParamters.segments,
 			value,
-			circleParamters.thetaLength,
+			circleParamters.thetaLength * Math.PI,
 		);
 	});
 circleFolder
-	.add(circleParamters, "thetaStart", 1, 20, 0.001)
+	.add(circleParamters, "thetaStart", 0, 2, 0.001)
 	.onChange((value) => {
 		circle.geometry.dispose();
 		circle.geometry = new THREE.CircleGeometry(
 			circleParamters.radius,
 			circleParamters.segments,
 			circleParamters.thetaStart,
-			value,
+			value * Math.PI,
 		);
 	});
 
 const coneParamters = {
 	radius: 1,
 	height: 2,
-	radialSegments: 32,
+	radialSegments: 5,
 	heightSegments: 1,
 };
 
@@ -242,13 +283,25 @@ objectPosition(cone, 0, 3);
 
 const coneFolder = gui.addFolder("cone");
 coneFolder.add(coneParamters, "radius", 1, 10, 0.001).onChange((value) => {
-	cone.scale.set(value, coneParamters.height);
+	cone.geometry.dispose();
+	cone.geometry = new THREE.ConeGeometry(
+		value,
+		coneParamters.height,
+		coneParamters.radialSegments,
+		coneParamters.heightSegments,
+	);
 });
 coneFolder.add(coneParamters, "height", 1, 10, 0.001).onChange((value) => {
-	cone.scale.set(coneParamters.radius, value);
+	cone.geometry.dispose();
+	cone.geometry = new THREE.ConeGeometry(
+		coneParamters.radius,
+		value,
+		coneParamters.radialSegments,
+		coneParamters.heightSegments,
+	);
 });
 coneFolder
-	.add(coneParamters, "radialSegments", 3, 30, 0.001)
+	.add(coneParamters, "radialSegments", 5, 30, 0.001)
 	.onChange((value) => {
 		cone.geometry.dispose();
 		cone.geometry = new THREE.ConeGeometry(
